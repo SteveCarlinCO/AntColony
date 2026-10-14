@@ -2546,7 +2546,8 @@
     attackCooldown = [0,0,0];
     var ticker = document.getElementById('ticker');
     if (ticker) ticker.innerHTML = '';
-    document.getElementById('victory').style.display = 'none';
+    var vic = document.getElementById('victory');
+    if (vic) vic.style.display = 'none';
     worldReady = false;
     started = false; winner = -1; bet = -1;
     simT = 0;
