@@ -1,0 +1,32 @@
+:root{
+  --hatch-widget-text:#e8e6e3;
+  --hatch-widget-muted:#9a978f;
+  --hatch-widget-surface:#1c1a18;
+  --hatch-widget-border:#3a3733;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:#0a0a0a;
+  color:var(--hatch-widget-text);
+  font-family:'Special Elite',monospace;
+  padding:16px;
+  max-width:1100px;
+  margin:0 auto;
+}
+.canvas-holder{
+  position:relative;
+  width:100%;
+  border:1px solid var(--hatch-widget-border);
+  border-radius:8px;
+  overflow:hidden;
+  background:#141009;
+}
+.portal-canvas{
+  display:block;
+  width:100%;
+  height:560px;
+}
+button{font-family:'Special Elite',monospace;}
+button:disabled{opacity:.4;cursor:default;}
+.colonyBtn.selected{outline:2px solid #fff;outline-offset:2px;}

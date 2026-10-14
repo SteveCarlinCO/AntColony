@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANT COLONY</title>
+<meta name="description" content="1,000 ants. Three colonies. Zero input. Bet on Red, Blue or Gold and watch them forage, fight, and survive spiders, assassin bugs, and webs. First to 500 food wins.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ANT COLONY — a game that plays itself">
+<meta property="og:description" content="1,000 ants. Three colonies. Zero input. Bet on a colony and watch the chaos. First to 500 food wins.">
+<meta property="og:image" content="stevecarlinco.github.io/AntColony/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ANT COLONY — a game that plays itself">
+<meta name="twitter:description" content="1,000 ants. Three colonies. Zero input. Bet on a colony and watch. First to 500 food wins.">
+<meta name="twitter:image" content="stevecarlinco.github.io/AntColony/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="ant_styles.css">
+</head>
+<body>
+  <div class="canvas-holder" style="position:relative;">
+    <canvas id="cv10" class="portal-canvas"></canvas>
+    <button id="foodGuideBtn" style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;border:1px solid #555;background:rgba(0,0,0,0.6);color:#fff;font-size:16px;cursor:pointer;font-family:inherit;z-index:5;">?</button>
+    <div id="foodGuide" style="display:none;position:absolute;top:42px;right:8px;width:220px;background:rgba(20,20,20,0.95);border:1px solid #555;border-radius:10px;padding:12px;color:#e8e6e3;font-family:'Special Elite',monospace;font-size:13px;z-index:10;">
+      <div style="font-weight:bold;margin-bottom:8px;text-align:center;">FOOD VALUE GUIDE</div>
+      <div style="display:flex;align-items:center;margin:6px 0;">
+        <svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 20,10 14,26 8,10" fill="#f0f0f0" stroke="#999" stroke-width="1"/><polygon points="14,2 17,10 14,14 11,10" fill="#fff"/></svg>
+        <span style="margin-left:8px;">Sugar crystal</span><span style="margin-left:auto;color:#ffd700;">1</span>
+      </div>
+      <div style="display:flex;align-items:center;margin:6px 0;">
+        <svg width="28" height="28" viewBox="0 0 28 28"><ellipse cx="14" cy="14" rx="10" ry="7" fill="#8a6a3a"/><ellipse cx="11" cy="11" rx="4" ry="2.5" fill="#a8844e" opacity="0.6"/><ellipse cx="16" cy="14" rx="2" ry="1.2" fill="#5a4028"/></svg>
+        <span style="margin-left:8px;">Seed</span><span style="margin-left:auto;color:#ffd700;">2</span>
+      </div>
+      <div style="display:flex;align-items:center;margin:6px 0;">
+        <svg width="28" height="28" viewBox="0 0 28 28"><path d="M4,20 Q14,4 24,20 Q14,16 4,20" fill="#e8a83e" stroke="#a85e14" stroke-width="1"/><path d="M8,18 Q14,8 20,18" fill="none" stroke="#c67a1e" stroke-width="1"/></svg>
+        <span style="margin-left:8px;">Bracket fungus</span><span style="margin-left:auto;color:#ffd700;">2</span>
+      </div>
+      <div style="display:flex;align-items:center;margin:6px 0;">
+        <svg width="28" height="28" viewBox="0 0 28 28"><ellipse cx="8" cy="14" rx="7" ry="4" fill="#ccd6e0" opacity="0.7"/><ellipse cx="20" cy="14" rx="7" ry="4" fill="#ccd6e0" opacity="0.7"/><ellipse cx="14" cy="14" rx="6" ry="3.5" fill="#4a4a4a"/></svg>
+        <span style="margin-left:8px;">Dead fly</span><span style="margin-left:auto;color:#ffd700;">3</span>
+      </div>
+      <div style="display:flex;align-items:center;margin:6px 0;">
+        <svg width="28" height="28" viewBox="0 0 28 28"><ellipse cx="14" cy="14" rx="11" ry="4" fill="#6b4f30"/><line x1="4" y1="14" x2="24" y2="14" stroke="#3a2a18" stroke-width="1"/><path d="M4,12 L1,8 M4,16 L1,20" stroke="#5a4028" stroke-width="2"/></svg>
+        <span style="margin-left:8px;">Dead cricket</span><span style="margin-left:auto;color:#ffd700;">3</span>
+      </div>
+      <div style="display:flex;align-items:center;margin:6px 0;">
+        <svg width="28" height="28" viewBox="0 0 28 28"><ellipse cx="14" cy="14" rx="10" ry="7" fill="#1e1a16"/><ellipse cx="11" cy="11" rx="4" ry="2.5" fill="#3a322a" opacity="0.6"/><path d="M6,8 L4,4 M10,7 L9,3 M18,7 L19,3 M22,8 L24,4" stroke="#0f0d0a" stroke-width="1.5"/></svg>
+        <span style="margin-left:8px;">Dead beetle</span><span style="margin-left:auto;color:#ffd700;">5</span>
+      </div>
+      <div style="text-align:center;margin-top:8px;font-size:11px;color:#999;">food per haul</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;">
+    <span style="font-size:12px;color:var(--hatch-widget-text);">Bet on colony:</span>
+    <button class="colonyBtn" data-col="0" style="background:#8b2020;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;">Red</button>
+    <button class="colonyBtn" data-col="1" style="background:#1a3a8b;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;">Blue</button>
+    <button class="colonyBtn" data-col="2" style="background:#8b7a1a;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;">Gold</button>
+    <button id="startBtn" style="background:#1d7a3a;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;">Start foraging</button>
+    <div style="flex:1;display:flex;gap:8px;align-items:center;justify-content:center;">
+      <span id="simTitle" style="font-family:'Special Elite',monospace;font-size:14px;color:#c9a227;letter-spacing:.1em;">ANT COLONY</span>
+      <button id="randomBtn" style="background:var(--hatch-widget-surface);color:var(--hatch-widget-text);border:1px solid var(--hatch-widget-border);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;">Randomize Resources</button>
+      <button id="reset10" style="background:var(--hatch-widget-surface);color:var(--hatch-widget-text);border:1px solid var(--hatch-widget-border);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;">Reset</button>
+    </div>
+    <div id="timer10" style="font-size:14px;color:var(--hatch-widget-text);font-weight:700;">0:00</div>
+  </div>
+
+  <div id="status10" style="font-size:12px;color:var(--hatch-widget-muted);margin-top:8px;min-height:18px;">Pick a colony. First to bank 500 food wins.</div>
+  <div id="ticker" style="margin-top:8px;height:56px;overflow-y:auto;font-size:12px;font-family:'Special Elite',monospace;color:var(--hatch-widget-text);border:1px solid var(--hatch-widget-border);border-radius:8px;padding:6px 10px;background:var(--hatch-widget-surface);"></div>
+
+  <div style="margin-top:12px;border:1px solid var(--hatch-widget-border);border-radius:8px;overflow:hidden;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;color:var(--hatch-widget-text);font-family:'Special Elite',monospace;">
+      <tr style="background:var(--hatch-widget-surface);">
+        <th style="padding:8px 12px;text-align:left;">Colony</th>
+        <th style="padding:8px 12px;text-align:left;">Food banked</th>
+        <th style="padding:8px 12px;text-align:left;">Scouts</th>
+        <th style="padding:8px 12px;text-align:left;">Workers</th>
+        <th style="padding:8px 12px;text-align:left;">Warriors</th>
+        <th style="padding:8px 12px;text-align:left;">Total ants</th>
+        <th style="padding:8px 12px;text-align:left;">Workers killed</th>
+        <th style="padding:8px 12px;text-align:left;">Foragers killed</th>
+        <th style="padding:8px 12px;text-align:left;">Warriors killed</th>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;color:#ff6b6b;">Red</td>
+        <td id="food0" style="padding:8px 12px;"><span id="foodnum0">0</span> <span style="display:inline-block;width:60px;height:8px;background:rgba(255,255,255,0.15);border-radius:4px;vertical-align:middle;overflow:hidden;"><span id="foodbar0" style="display:block;height:100%;width:0%;background:#ff6b6b;border-radius:4px;"></span></span></td>
+        <td id="out0" style="padding:8px 12px;">0</td>
+        <td id="car0" style="padding:8px 12px;">0</td>
+        <td id="war0" style="padding:8px 12px;">0</td>
+        <td id="tot0" style="padding:8px 12px;">0</td>
+        <td id="kw0" style="padding:8px 12px;">0</td>
+        <td id="kf0" style="padding:8px 12px;">0</td>
+        <td id="kwar0" style="padding:8px 12px;">0</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;color:#6b9bff;">Blue</td>
+        <td id="food1" style="padding:8px 12px;"><span id="foodnum1">0</span> <span style="display:inline-block;width:60px;height:8px;background:rgba(255,255,255,0.15);border-radius:4px;vertical-align:middle;overflow:hidden;"><span id="foodbar1" style="display:block;height:100%;width:0%;background:#4d96ff;border-radius:4px;"></span></span></td>
+        <td id="out1" style="padding:8px 12px;">0</td>
+        <td id="car1" style="padding:8px 12px;">0</td>
+        <td id="war1" style="padding:8px 12px;">0</td>
+        <td id="tot1" style="padding:8px 12px;">0</td>
+        <td id="kw1" style="padding:8px 12px;">0</td>
+        <td id="kf1" style="padding:8px 12px;">0</td>
+        <td id="kwar1" style="padding:8px 12px;">0</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;color:#ffd24a;">Gold</td>
+        <td id="food2" style="padding:8px 12px;"><span id="foodnum2">0</span> <span style="display:inline-block;width:60px;height:8px;background:rgba(255,255,255,0.15);border-radius:4px;vertical-align:middle;overflow:hidden;"><span id="foodbar2" style="display:block;height:100%;width:0%;background:#ffd700;border-radius:4px;"></span></span></td>
+        <td id="out2" style="padding:8px 12px;">0</td>
+        <td id="car2" style="padding:8px 12px;">0</td>
+        <td id="war2" style="padding:8px 12px;">0</td>
+        <td id="tot2" style="padding:8px 12px;">0</td>
+        <td id="kw2" style="padding:8px 12px;">0</td>
+        <td id="kf2" style="padding:8px 12px;">0</td>
+        <td id="kwar2" style="padding:8px 12px;">0</td>
+      </tr>
+    </table>
+  </div>
+
+<script src="ant_script.js"></script>
+  <div id="victory" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:100;overflow-y:auto;">
+    <div style="max-width:700px;margin:40px auto;background:rgba(26,26,26,0.5);border:1px solid #444;border-radius:12px;padding:24px;color:#e8e6e3;font-family:'Special Elite',monospace;">
+      <h2 id="vTitle" style="text-align:center;margin-top:0;"></h2>
+      <div id="vStats"></div>
+      <h3>Food Over Time</h3>
+      <canvas id="vFoodChart" width="640" height="120" style="width:100%;border:1px solid var(--hatch-widget-border);border-radius:8px;"></canvas>
+      <h3>Kills by Cause</h3>
+      <canvas id="vKillChart" width="640" height="200" style="width:100%;border:1px solid var(--hatch-widget-border);border-radius:8px;"></canvas>
+      <h3>Play by Play</h3>
+      <div id="vEvents" style="max-height:180px;overflow-y:auto;font-size:12px;border:1px solid #444;border-radius:8px;padding:8px 12px;background:rgba(0,0,0,0.3);"></div>
+      <div style="text-align:center;margin-top:16px;">
+        <button onclick="document.getElementById('victory').style.display='none'" style="padding:8px 24px;font-family:inherit;cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
